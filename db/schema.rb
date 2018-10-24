@@ -10,10 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_23_155959) do
+ActiveRecord::Schema.define(version: 2018_10_24_213229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "card_tags", force: :cascade do |t|
+    t.bigint "card_id"
+    t.bigint "tag_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["card_id"], name: "index_card_tags_on_card_id"
+    t.index ["tag_id"], name: "index_card_tags_on_tag_id"
+  end
+
+  create_table "cards", force: :cascade do |t|
+    t.string "term"
+    t.text "desc"
+    t.string "def"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "categories", force: :cascade do |t|
     t.text "desc"
@@ -23,6 +40,15 @@ ActiveRecord::Schema.define(version: 2018_10_23_155959) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "categorizations", force: :cascade do |t|
+    t.bigint "card_id"
+    t.bigint "category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["card_id"], name: "index_categorizations_on_card_id"
+    t.index ["category_id"], name: "index_categorizations_on_category_id"
+  end
+
   create_table "dependencies", force: :cascade do |t|
     t.integer "dependent_id"
     t.integer "dependee_id"
@@ -30,4 +56,14 @@ ActiveRecord::Schema.define(version: 2018_10_23_155959) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "card_tags", "cards"
+  add_foreign_key "card_tags", "tags"
+  add_foreign_key "categorizations", "cards"
+  add_foreign_key "categorizations", "categories"
 end
