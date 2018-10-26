@@ -5,6 +5,6 @@ class Api::V1::CategoriesController < ApplicationController
     end
     def show
         category = Category.find(params[:id])
-        render :json => category
+        render :json => category, include: ['cards']
     end
 end

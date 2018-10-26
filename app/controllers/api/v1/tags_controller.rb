@@ -5,6 +5,6 @@ class Api::V1::TagsController < ApplicationController
     end
     def show
         tag = Tag.find(params[:id])
-        render :json => tag
+        render :json => tag, include: ['cards']
     end
 end
