@@ -7,4 +7,9 @@ class Api::V1::CategoriesController < ApplicationController
         category = Category.find(params[:id])
         render :json => category, include: ['cards']
     end
+    def update
+        category = Category.find(params[:id])
+        byebug
+        render :json => category
+    end
 end
