@@ -5,13 +5,17 @@ class Api::V1::CategoriesController < ApplicationController
     end
     def show
         category = Category.find(params[:id])
-        render :json => category, methods: [:some_arbitrary_method]
+        render :json => category, methods: [:cards]
     end
     def update
         @category = Category.find(params[:id])
-        render :json => category
+        if @category.update(category_params)
+            render :json => @category
+        else
+            render :json => @category.errors
+        end
     end
     def category_params
-        params[:data].permit(:id, :type, :attributes => [:name, "img-url", :desc], :relationships => [:cards => [:data], :dependencies => [:data], :dependents => [:data]]).to_h
+        params.require(:category).permit(:id, :desc, :img_url, :name,  :created_at, :updated_at)
     end
 end
