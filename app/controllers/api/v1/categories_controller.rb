@@ -14,7 +14,6 @@ class Api::V1::CategoriesController < ApplicationController
             @cards.push(@card.update!(card_params(card)))
         end
         @category = Category.find(params[:id])
-        byebug
         if @category.update(category_params)
             render :json => @category, methods: [:cards]
         else
