@@ -1,17 +1,23 @@
 class Api::V1::CategoriesController < ApplicationController
     def index
-        categories = Category.all
-        render :json => categories, methods: [:cards]
+         categories = Category.all
+        render :json => categories.to_json(include: {cards: {include: :tags}})
     end
     def show
         category = Category.find(params[:id])
-        render :json => category, methods: [:cards]
+        render json: category.to_json(include: {cards: {include: :tags}})
     end
     def update
         @cards = []
         params[:cards].each do |card|
-            @card = Card.find(card[:id])
-            @cards.push(@card.update!(card_params(card)))
+            if card[:id]
+                @card = Card.find(card[:id])
+                @cards.push(@card.update!(card_params(card)))
+            else
+                @card = Card.create!(card_params(card))
+                Categorization.create!(card: @card, category_id: params[:id])
+                @cards.push(@card)
+            end
         end
         @category = Category.find(params[:id])
         if @category.update(category_params)
