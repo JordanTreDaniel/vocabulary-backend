@@ -9,18 +9,23 @@ class Api::V1::CategoriesController < ApplicationController
     end
     def update
         @cards = []
+        if params[:id] != "undefined"
+            @category = Category.find(params[:id])
+            @category.update(category_params)
+        else
+            @category = Category.create!(category_params)
+        end
         params[:cards].each do |card|
             if card[:id]
                 @card = Card.find(card[:id])
                 @cards.push(@card.update!(card_params(card)))
             else
                 @card = Card.create!(card_params(card))
-                Categorization.create!(card: @card, category_id: params[:id])
+                Categorization.create!(card: @card, category_id: @category.id)
                 @cards.push(@card)
             end
         end
-        @category = Category.find(params[:id])
-        if @category.update(category_params)
+        if @category.save!
             render :json => @category, methods: [:cards]
         else
             render :json => @category.errors
