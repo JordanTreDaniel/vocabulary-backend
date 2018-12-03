@@ -13,7 +13,7 @@ class Api::V1::CategoriesController < ApplicationController
     end
     def update
         @cards = []
-        if params[:id] != "undefined"
+        if params[:id] != "null"
             @category = Category.find(params[:id])
             @category.update(category_params)
         else
