@@ -1,11 +1,11 @@
 class Api::V1::CategoriesController < ApplicationController
     def index
         @categories = Category.all
-        render :json => @categories.to_json(include: {cards: {include: :tags}})
+        render :json => @categories.to_json(include: [{cards: {include: :tags}}, :dependents, :dependencies])
     end
     def show
         category = Category.find(params[:id])
-        render json: category.to_json(include: {cards: {include: :tags}})
+        render json: category.to_json(include: [{cards: {include: :tags}}, :dependents, :dependencies])
     end
     def destroy
         category = Category.destroy(params[:id])
