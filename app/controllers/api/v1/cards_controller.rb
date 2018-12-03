@@ -7,4 +7,8 @@ class Api::V1::CardsController < ApplicationController
         card = Card.find(params[:id])
         render :json => card
     end
+    def destroy
+        Card.destroy(params[:id])
+        render :json => {message: "Card number #{params[:id]} has been deleted."}
+    end
 end

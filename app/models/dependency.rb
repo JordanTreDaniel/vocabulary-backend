@@ -4,5 +4,4 @@ class Dependency < ApplicationRecord
     # def crazy
     #     return "Crazy"
     # end
-
 end
