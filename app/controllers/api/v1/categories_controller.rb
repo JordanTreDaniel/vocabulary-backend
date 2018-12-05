@@ -11,6 +11,26 @@ class Api::V1::CategoriesController < ApplicationController
         category = Category.destroy(params[:id])
         render :json => {message: "Category number #{params[:id]} has been deleted."}
     end
+    def create
+        @cards = []
+        @category = Category.create!(category_params)
+        byebug
+        params[:cards].each do |card|
+            if card[:id]
+                @card = Card.find(card[:id])
+                @cards.push(@card.update!(card_params(card)))
+            else
+                @card = Card.create!(card_params(card))
+                Categorization.create!(card: @card, category_id: @category.id)
+                @cards.push(@card)
+            end
+        end
+        if @category.save!
+            render :json => @category, methods: [:cards]
+        else
+            render :json => @category.errors
+        end
+    end
     def update
         @cards = []
         if params[:id] != "null"
