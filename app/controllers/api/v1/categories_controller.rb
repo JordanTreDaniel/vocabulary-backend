@@ -14,7 +14,6 @@ class Api::V1::CategoriesController < ApplicationController
     def create
         @cards = []
         @category = Category.create!(category_params)
-        byebug
         params[:cards].each do |card|
             if card[:id]
                 @card = Card.find(card[:id])
@@ -33,12 +32,8 @@ class Api::V1::CategoriesController < ApplicationController
     end
     def update
         @cards = []
-        if params[:id] != "null"
-            @category = Category.find(params[:id])
-            @category.update(category_params)
-        else
-            @category = Category.create!(category_params)
-        end
+        @category = Category.find(params[:id])
+        @category.update(category_params)
         params[:cards].each do |card|
             if card[:id]
                 @card = Card.find(card[:id])
