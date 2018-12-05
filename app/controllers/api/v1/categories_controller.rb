@@ -1,7 +1,7 @@
 class Api::V1::CategoriesController < ApplicationController
     def index
         @categories = Category.all
-        render :json => @categories.to_json(include: [{cards: {include: :tags}}, :dependents, :dependencies])
+        render :json => @categories.to_json(include: [{cards: {include: [:tags]}}, :dependents, :dependencies])
     end
     def show
         category = Category.find(params[:id])
