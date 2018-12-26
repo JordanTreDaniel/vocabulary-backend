@@ -48,3 +48,5 @@ gem "rack-cors", "~> 1.0"
 
 
 gem "figaro", "~> 1.1"
+
+gem "google-cloud-language", "~> 0.31.2"
