@@ -10,7 +10,7 @@ class Api::V1::UsersController < ApplicationController
         })
         github_token = JSON.parse(response.body)["access_token"]
 
-        user = RestClient.get("https://api.github.com/user?access_token=#{github_token}", {
+        response = RestClient.get("https://api.github.com/user?access_token=#{github_token}", {
             client_id: ENV["GITHUB_CLIENT_ID"],
             client_secret: ENV["GITHUB_CLIENT_SECRET"],
             headers: {
@@ -19,8 +19,11 @@ class Api::V1::UsersController < ApplicationController
             }
         })
 
-        byebug
-        render :json => {token: github_token, user: user}
+        github_user = JSON.parse(response)
+        user = User.find_or_create_by(username: github_user["login"]) do |u|
+            u["avatar_url"] = github_user["avatar_url"]
+        end
+        render :json => {user: user}
     end
     def test
         render :json => {response: "Test"}
