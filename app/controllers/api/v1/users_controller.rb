@@ -1,5 +1,13 @@
 require 'json'
 class Api::V1::UsersController < ApplicationController
+    def show
+        user = User.find(params[:id])
+        if user 
+            render :json => user 
+        else
+            render :json => user.errors
+        end
+    end
     def sign_in
         response = RestClient.post("https://github.com/login/oauth/access_token", {
             client_id: ENV["GITHUB_CLIENT_ID"],
@@ -23,9 +31,11 @@ class Api::V1::UsersController < ApplicationController
         user = User.find_or_create_by(username: github_user["login"]) do |u|
             u["avatar_url"] = github_user["avatar_url"]
         end
-        render :json => {user: user}
+        render :json => user
     end
+
     def test
+
         render :json => {response: "Test"}
     end
 end
